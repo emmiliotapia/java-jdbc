@@ -37,16 +37,33 @@ public class ProductoController {
 			fila.put("DESCRIPCION", resultSet.getNString("DESCRIPCION"));
 			fila.put("CANTIDAD", String.valueOf(resultSet.getInt("CANTIDAD")));
 			
-			resultado.add(fila);
+			resultado.add(fila);		
 		}
+		
 		con.close();
-		
-		
+				
 		return resultado;
 	}
 
-    public void guardar(Object producto) {
-		// TODO
+    public void guardar(Map<String, String> producto) throws SQLException {
+		Connection con = new ConnectionFactory().CrearConexion();
+		
+		Statement statement = con.createStatement();
+		
+		statement.execute("INSERT INTO PRODUCTO (nombre, descripcion, cantidad) "
+				+ " VALUES ('" + producto.get("NOMBRE") + "', '" 
+				+ producto.get("DESCRIPCION") + "', "
+				+ producto.get("CANTIDAD") + ")", Statement.RETURN_GENERATED_KEYS);
+		ResultSet resultSet = statement.getGeneratedKeys();
+		
+		while (resultSet.next()) {
+			System.out.println(
+					String.format(
+					"Fue insertado el producto de ID %d", 
+					resultSet.getInt(1)));
+		}
+		
+		
 	}
 
 }

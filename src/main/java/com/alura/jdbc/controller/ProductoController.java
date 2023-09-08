@@ -2,6 +2,7 @@ package com.alura.jdbc.controller;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,12 +15,34 @@ import com.alura.jdbc.factory.ConnectionFactory;
 
 public class ProductoController {
 
-	public void modificar(String nombre, String descripcion, Integer id) {
-		// TODO
+	public int modificar(String nombre, String descripcion, Integer cantidad, Integer id) throws SQLException {
+		Connection con = new ConnectionFactory().CrearConexion();
+		Statement statement = con.createStatement();
+		statement.execute("UPDATE PRODUCTO SET "
+			    + " NOMBRE = '" + nombre + "'"
+			    + ", DESCRIPCION = '" + descripcion + "'"
+			    + ", CANTIDAD = " + cantidad
+			    + " WHERE ID = " + id);
+		
+		int updateCount = statement.getUpdateCount();
+		
+		con.close();
+		
+		return updateCount;
+
+
+
 	}
 
-	public void eliminar(Integer id) {
-		// TODO
+	public int eliminar(Integer id) throws SQLException {
+		Connection con = new ConnectionFactory().CrearConexion();
+		
+		Statement statement = con.createStatement();
+		statement.execute("DELETE FROM PRODUCTO WHERE ID = " + id);
+		
+		return statement.getUpdateCount();
+		
+
 	}
 
 	public List<Map<String, String>> listar() throws SQLException {

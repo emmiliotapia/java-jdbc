@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.management.RuntimeErrorException;
 import javax.sql.DataSource;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -22,7 +23,11 @@ public class ConnectionFactory {
 		this.dataSource = pooledDataSource;
 	}
 	
-	public Connection CrearConexion() throws SQLException {
-		return this.dataSource.getConnection();
+	public Connection CrearConexion() {
+		try {
+			return this.dataSource.getConnection();
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
